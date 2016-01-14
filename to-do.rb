@@ -1,46 +1,76 @@
-require 'csv'
-
-class Task
-
-end
-
-
-class List
-
-end
-
-
-class ToDoList
-
-  def show (arr)
-    arr.each do |task|
-      puts task
-    end
-  end
-
-end
-
+require_relative 'view'
+require_relative 'model'
 
 class Controller
 
   def initialize
-    @todolist = ToDoList.new
+    @command = ARGV
+    @list = List.new
+    @view = View.new
+    menu()
+  end
+
+  def menu
+    commands = ["add", "complete", "delete", "index"]
+    method = @command[0]
+    if commands.include? method
+      case method
+        when "add"
+          @command.shift
+          text = @command.join(" ")
+          add(text)
+          @view.add_message(text)
+          index()
+        when "delete"
+          to_delete = @command[1].to_i
+          check = check_number(to_delete)
+          if check == true
+            @view.delete_message(delete(to_delete))
+            index()
+          else
+            index()
+            @view.error
+          end
+        when "index"
+          index()
+        when "complete"
+          to_complete = @command[1].to_i
+          check = check_number(to_complete)
+          if check == true
+            @view.complete_message(complete(to_complete))
+            index()
+          else
+            index()
+            @view.error
+          end
+      end
+    else
+      @view.error
+    end
   end
 
   def index
-    i = 0
-    task_list = []
-    list_csv = CSV.read("list.csv")
-    list_csv.each do |task|
-      task = task[0]
-      i += 1
-      task = "#{i}. #{task}"
-      task_list << task
-    end
-    @todolist.show(task_list)
+    @view.show(@list.todolist)
+  end
+
+  def add(string)
+    task = Task.new(string)
+    @list.new_task(task)
+  end
+
+  def delete(to_delete)
+    confirm = @list.delete_task(to_delete)
+  end
+
+  def complete(to_complete)
+    confirm = @list.complete_task(to_complete)
+  end
+
+  def check_number(num)
+    length = @list.todolist.length
+    check = num <= length ? true : false
   end
 
 end
 
-todolist = ToDoList.new
-todolist.index
+todo = Controller.new
