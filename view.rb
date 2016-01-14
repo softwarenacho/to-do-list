@@ -1,3 +1,4 @@
+require 'colorize'
 class View
 
   def show(arr)
@@ -19,19 +20,19 @@ class View
   end
 
   def add_message(text)
-    puts "\nAgregaste la tarea: \"#{text}\" a tu lista"
+    puts "\nAgregaste la tarea: " + "\"#{text}\"".colorize(:green) + " a tu lista\n\n"
   end
 
   def delete_message(text)
-    puts "\nEliminaste la tarea: \"#{text}\" a tu lista"
+    puts "\nEliminaste la tarea: " + "\"#{text}\"".colorize(:red) + " de tu lista\n\n"
   end
 
   def complete_message(text)
-    puts "\nCompletaste la tarea: \"#{text}\"."
+    puts "\nCompletaste la tarea: " + "\"#{text}\"\n\n".colorize(:cyan)
   end
 
   def error
-    puts "\nNO SE RECIBIÓ UN COMANDO O NÚMERO CORRECTO"
+    puts "\nNO SE RECIBIÓ UN COMANDO O NÚMERO CORRECTO\n"
   end
 
   def pantalla_dinamica

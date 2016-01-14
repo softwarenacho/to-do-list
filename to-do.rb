@@ -19,14 +19,15 @@ class Controller
           @command.shift
           text = @command.join(" ")
           add(text)
-          @view.add_message(text)
           index()
+          @view.add_message(text)
         when "delete"
           to_delete = @command[1].to_i
           check = check_number(to_delete)
           if check == true
-            @view.delete_message(delete(to_delete))
+            text = delete(to_delete)
             index()
+            @view.delete_message(text)
           else
             index()
             @view.error
@@ -37,8 +38,9 @@ class Controller
           to_complete = @command[1].to_i
           check = check_number(to_complete)
           if check == true
-            @view.complete_message(complete(to_complete))
+            text = complete(to_complete)
             index()
+            @view.complete_message(text)
           else
             index()
             @view.error
